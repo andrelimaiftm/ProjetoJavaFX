@@ -12,6 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ViewController implements Initializable {
@@ -32,7 +33,8 @@ public class ViewController implements Initializable {
 
     @FXML
     public void onMenuItemDepartamentoAction(){
-        System.out.println("onMenuItemDepartamentoAction");
+        loadView2("listaDepartamento.fxml");
+        //System.out.println("onMenuItemDepartamentoAction");
     }
 
     @FXML
@@ -56,6 +58,7 @@ public class ViewController implements Initializable {
             VBox novaVBox =  loader.load();
             Scene scenePrincipal = Main.getScene();
             VBox vboxPrincipal = (VBox) ((ScrollPane) scenePrincipal.getRoot()).getContent();
+
             Node menuPrincipal = vboxPrincipal.getChildren().get(0);
             vboxPrincipal.getChildren().clear();
             vboxPrincipal.getChildren().add(menuPrincipal);
@@ -63,6 +66,30 @@ public class ViewController implements Initializable {
 
         } catch (IOException e) {
             Alerts.showAlert("IOException", "Erro ao carregar a view",
+                    e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    public void loadView2(String nomeDaView) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeDaView));
+            VBox novaVBox =  loader.load();
+            Scene scenePrincipal = Main.getScene();
+            VBox vboxPrincipal = (VBox) ((ScrollPane) scenePrincipal.getRoot()).getContent();
+            Node menuPrincipal = vboxPrincipal.getChildren().get(0);
+            vboxPrincipal.getChildren().clear();
+            vboxPrincipal.getChildren().add(menuPrincipal);
+            vboxPrincipal.getChildren().addAll(novaVBox.getChildren());
+
+            ListaDepartamentoController controller  = loader.getController();
+            controller.setDepartamentoServico(new DepartamentoService());
+            controller.updateTableView();
+
+        } catch (IOException e) {
+            Alerts.showAlert("IOException", "Erro ao carregar a view",
+                    e.getMessage(), Alert.AlertType.ERROR);
+        }catch (IllegalAccessException e){
+            Alerts.showAlert("IllegalAccessException", "Erro ao carregar a view",
                     e.getMessage(), Alert.AlertType.ERROR);
         }
     }
