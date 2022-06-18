@@ -1,5 +1,6 @@
 package br.edu.iftm.projetojavafx;
 
+import br.edu.iftm.projetojavafx.Exception.ValidacaoException;
 import br.edu.iftm.projetojavafx.util.Alerts;
 import br.edu.iftm.projetojavafx.util.RetricoesTela;
 import br.edu.iftm.projetojavafx.util.Utils;
@@ -12,9 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class FormDepartamentoController  implements Initializable {
 
@@ -53,10 +52,15 @@ public class FormDepartamentoController  implements Initializable {
         if(departamento == null){
             throw new IllegalStateException("Departamento está vazio");
         }
-        departamento = getDadosFormulario();
-        service.SaveOrUpdate(departamento);
-        notificaAtualizaDadoListerners();
-        Utils.stageCorrente(event).close();
+        try {
+            departamento = getDadosFormulario();
+            service.SaveOrUpdate(departamento);
+            notificaAtualizaDadoListerners();
+            Utils.stageCorrente(event).close();
+        }catch (ValidacaoException e){
+            setMensagemErros(e.getErros());
+        }
+
     }
 
     @FXML
@@ -104,8 +108,26 @@ public class FormDepartamentoController  implements Initializable {
     private Departamento getDadosFormulario() {
         Departamento obj = new Departamento();
 
+        ValidacaoException exception = new ValidacaoException("Erro de validação");
+
         obj.setId(Utils.tryParseToInt(txtId.getText()));
+
+        if(txtNome.getText() == null || txtNome.getText().trim().equals("")){
+            exception.addErro("nome", "Campo não pode ser vazio");
+        }
         obj.setNome(txtNome.getText());
+
+        if (exception.getErros().size() > 0){
+            throw exception;
+        }
         return obj;
+    }
+
+    private void setMensagemErros(Map<String, String> erros) {
+        Set<String> campos = erros.keySet();
+
+        if(campos.contains("nome")){
+            labelNomeErro.setText(erros.get("nome"));
+        }
     }
 }
