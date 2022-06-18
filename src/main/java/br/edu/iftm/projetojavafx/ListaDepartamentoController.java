@@ -2,6 +2,7 @@ package br.edu.iftm.projetojavafx;
 
 import br.edu.iftm.projetojavafx.util.Alerts;
 import br.edu.iftm.projetojavafx.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -37,6 +35,9 @@ public class ListaDepartamentoController implements Initializable, AtualizaDadoL
 
     @FXML
     private TableColumn<Departamento, String> tableColumnNome;
+
+    @FXML
+    private TableColumn<Departamento, Departamento> tableColumnEdit;
 
     @FXML
     private Button btNovo;
@@ -75,6 +76,7 @@ public class ListaDepartamentoController implements Initializable, AtualizaDadoL
         List<Departamento> lista = service.buscarTodos();
         obsLista = FXCollections.observableList(lista);
         tableViewDepartamento.setItems(obsLista);
+        inicializaBotaoEditar();
 
     }
 
@@ -108,5 +110,24 @@ public class ListaDepartamentoController implements Initializable, AtualizaDadoL
     @Override
     public void onMudancaDados() throws IllegalAccessException {
         updateTableView();
+    }
+
+    private void inicializaBotaoEditar() {
+        tableColumnEdit.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnEdit.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+            private final Button button = new Button("editar");
+            @Override
+            protected void updateItem(Departamento obj, boolean vazio) {
+                super.updateItem(obj, vazio);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(
+                        event -> criaCaixaDeDialogo(
+                                obj, "formDepartamento.fxml",Utils.stageCorrente(event)));
+            }
+        });
     }
 }

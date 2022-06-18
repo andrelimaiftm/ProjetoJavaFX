@@ -24,7 +24,7 @@ public class DepartamentoService {
             lista.add(obj);
         }else{
             Integer posicao = obj.getId()-1;
-            lista.add(posicao, obj);
+            lista.set(posicao, obj);
         }
     }
 
