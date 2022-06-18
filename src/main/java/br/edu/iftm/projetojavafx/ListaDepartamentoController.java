@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ListaDepartamentoController implements Initializable, AtualizaDadoListener {
@@ -38,6 +39,9 @@ public class ListaDepartamentoController implements Initializable, AtualizaDadoL
 
     @FXML
     private TableColumn<Departamento, Departamento> tableColumnEdit;
+
+    @FXML
+    private TableColumn<Departamento, Departamento> tableColumnRemove;
 
     @FXML
     private Button btNovo;
@@ -77,6 +81,7 @@ public class ListaDepartamentoController implements Initializable, AtualizaDadoL
         obsLista = FXCollections.observableList(lista);
         tableViewDepartamento.setItems(obsLista);
         inicializaBotaoEditar();
+        inicializaBotaoRemover();
 
     }
 
@@ -129,5 +134,44 @@ public class ListaDepartamentoController implements Initializable, AtualizaDadoL
                                 obj, "formDepartamento.fxml",Utils.stageCorrente(event)));
             }
         });
+    }
+
+    private void inicializaBotaoRemover() {
+        tableColumnRemove.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        tableColumnRemove.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+            private final Button button = new Button("remover");
+            @Override
+            protected void updateItem(Departamento obj, boolean vazio) {
+                super.updateItem(obj, vazio);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> {
+                    try {
+                        removeDepartamento(obj);
+                    } catch (IllegalAccessException e) {
+                        Alerts.showAlert("IllegalAccessException", "Erro ao remover departamento.",
+                                e.getMessage(),
+                                Alert.AlertType.ERROR);
+                    }
+                });
+            }
+        });
+    }
+
+    private void removeDepartamento(Departamento obj) throws IllegalAccessException {
+        Optional<ButtonType> result = Alerts.mostrarConfirmacao("Confirmação",
+                "Você tem certeza que deseja remover o Departamento?");
+
+        if(result.get() == ButtonType.OK){
+            if(service == null){
+                throw new IllegalStateException("Servico está nulo.");
+            }
+
+            service.remover(obj);
+            updateTableView();
+        }
     }
 }

@@ -28,4 +28,8 @@ public class DepartamentoService {
         }
     }
 
+    public void remover(Departamento obj){
+        lista.remove(obj);
+    }
+
 }
