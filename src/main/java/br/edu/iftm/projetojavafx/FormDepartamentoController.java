@@ -1,15 +1,19 @@
 package br.edu.iftm.projetojavafx;
 
+import br.edu.iftm.projetojavafx.util.Alerts;
 import br.edu.iftm.projetojavafx.util.RetricoesTela;
 import br.edu.iftm.projetojavafx.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FormDepartamentoController  implements Initializable {
@@ -17,6 +21,8 @@ public class FormDepartamentoController  implements Initializable {
     private DepartamentoService service;
 
     private Departamento departamento;
+
+    private List<AtualizaDadoListener> atualizaDadoListeners = new ArrayList<>();
 
     @FXML
     private TextField txtId;
@@ -49,6 +55,7 @@ public class FormDepartamentoController  implements Initializable {
         }
         departamento = getDadosFormulario();
         service.SaveOrUpdate(departamento);
+        notificaAtualizaDadoListerners();
         Utils.stageCorrente(event).close();
     }
 
@@ -56,6 +63,24 @@ public class FormDepartamentoController  implements Initializable {
     public void onBtCancelarAction(ActionEvent event){
         Utils.stageCorrente(event).close();
     }
+
+    public void adicionaAtualizaDadosListener(AtualizaDadoListener listener){
+        atualizaDadoListeners.add(listener);
+    }
+
+    private void notificaAtualizaDadoListerners() {
+        for (AtualizaDadoListener listener: atualizaDadoListeners) {
+            try {
+                listener.onMudancaDados();
+            } catch (IllegalAccessException e) {
+                Alerts.showAlert("IllegalAccessException", "Erro ao atualizar dados",
+                        e.getMessage(),
+                        Alert.AlertType.ERROR);
+            }
+        }
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

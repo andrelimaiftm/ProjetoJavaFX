@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ListaDepartamentoController implements Initializable {
+public class ListaDepartamentoController implements Initializable, AtualizaDadoListener {
 
     private DepartamentoService service;
 
@@ -86,6 +86,7 @@ public class ListaDepartamentoController implements Initializable {
             FormDepartamentoController controller = loader.getController();
             controller.setDepartamento(obj);
             controller.setDepartamentoService(new DepartamentoService());
+            controller.adicionaAtualizaDadosListener(this);
             controller.atualizaDadosFormulario();
 
             Stage caixaDialogoStage = new Stage();
@@ -102,5 +103,10 @@ public class ListaDepartamentoController implements Initializable {
                     Alert.AlertType.ERROR);
         }
 
+    }
+
+    @Override
+    public void onMudancaDados() throws IllegalAccessException {
+        updateTableView();
     }
 }
