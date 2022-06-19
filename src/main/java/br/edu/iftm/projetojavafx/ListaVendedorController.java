@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -33,6 +34,15 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
 
     @FXML
     private TableColumn<Vendedor, Integer> tableColumnId;
+
+    @FXML
+    private TableColumn<Vendedor, String> tableColumnEmail;
+
+    @FXML
+    private TableColumn<Vendedor, Date> tableColumnDataNasc;
+
+    @FXML
+    private TableColumn<Vendedor, Double> tableColumnSalario;
 
     @FXML
     private TableColumn<Vendedor, String> tableColumnNome;
@@ -67,6 +77,12 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
     private void inicalizaNodes() {
         tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tableColumnDataNasc.setCellValueFactory(new PropertyValueFactory<>("dataNasc"));
+        Utils.formatTableColumnDate(tableColumnDataNasc, "dd/MM/yyyy");
+
+        tableColumnSalario.setCellValueFactory(new PropertyValueFactory<>("salario"));
+        Utils.formatTableColumnDouble(tableColumnSalario, 2);
 
         Stage stage = (Stage) Main.getScene().getWindow();
         tableViewVendedor.prefHeightProperty().bind(stage.heightProperty());

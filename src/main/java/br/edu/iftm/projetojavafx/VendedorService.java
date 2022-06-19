@@ -18,21 +18,21 @@ public class VendedorService {
             lista.add(new Vendedor(1,
                     "Andre",
                     "andre@gmail.com",
-                    new Date(1986, Calendar.APRIL, 27),
+                    new Date(86, Calendar.APRIL, 27),
                     2500.00,
                     listaDepart.get(0)));
 
             lista.add(new Vendedor(2,
                     "Renata",
                     "renata@gmail.com",
-                    new Date(1986, Calendar.NOVEMBER, 28),
+                    new Date(86, Calendar.NOVEMBER, 28),
                     3500.00,
                     listaDepart.get(1)));
 
             lista.add(new Vendedor(3,
                     "Jose",
                     "jose@gmail.com",
-                    new Date(1999, Calendar.JUNE, 03),
+                    new Date(99, Calendar.JUNE, 03),
                     1500.00,
                     listaDepart.get(2)));
         }
