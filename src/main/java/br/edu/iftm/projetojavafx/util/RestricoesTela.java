@@ -2,7 +2,7 @@ package br.edu.iftm.projetojavafx.util;
 
 import javafx.scene.control.TextField;
 
-public class RetricoesTela {
+public class RestricoesTela {
 
     public static void setTextFieldInteger(TextField txt) {
         txt.textProperty().addListener((obs, oldValue, newValue) -> {

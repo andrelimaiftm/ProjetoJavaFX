@@ -2,7 +2,7 @@ package br.edu.iftm.projetojavafx;
 
 import br.edu.iftm.projetojavafx.Exception.ValidacaoException;
 import br.edu.iftm.projetojavafx.util.Alerts;
-import br.edu.iftm.projetojavafx.util.RetricoesTela;
+import br.edu.iftm.projetojavafx.util.RestricoesTela;
 import br.edu.iftm.projetojavafx.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -93,8 +93,8 @@ public class FormDepartamentoController  implements Initializable {
     }
 
     private void initializeNodes(){
-        RetricoesTela.setTextFieldInteger(txtId);
-        RetricoesTela.setTextFieldMaxLength(txtNome, 30);
+        RestricoesTela.setTextFieldInteger(txtId);
+        RestricoesTela.setTextFieldMaxLength(txtNome, 30);
     }
 
     public void atualizaDadosFormulario(){
