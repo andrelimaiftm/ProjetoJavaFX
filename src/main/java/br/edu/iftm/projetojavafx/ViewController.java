@@ -28,7 +28,8 @@ public class ViewController implements Initializable {
 
     @FXML
     public void onMenuItemVendedorAction(){
-        System.out.println("onMenuItemVendedorAction");
+        loadView3("listaVendedor.fxml");
+        //System.out.println("onMenuItemVendedorAction");
     }
 
     @FXML
@@ -83,6 +84,30 @@ public class ViewController implements Initializable {
 
             ListaDepartamentoController controller  = loader.getController();
             controller.setDepartamentoServico(new DepartamentoService());
+            controller.updateTableView();
+
+        } catch (IOException e) {
+            Alerts.showAlert("IOException", "Erro ao carregar a view",
+                    e.getMessage(), Alert.AlertType.ERROR);
+        }catch (IllegalAccessException e){
+            Alerts.showAlert("IllegalAccessException", "Erro ao carregar a view",
+                    e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    public void loadView3(String nomeDaView) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeDaView));
+            VBox novaVBox =  loader.load();
+            Scene scenePrincipal = Main.getScene();
+            VBox vboxPrincipal = (VBox) ((ScrollPane) scenePrincipal.getRoot()).getContent();
+            Node menuPrincipal = vboxPrincipal.getChildren().get(0);
+            vboxPrincipal.getChildren().clear();
+            vboxPrincipal.getChildren().add(menuPrincipal);
+            vboxPrincipal.getChildren().addAll(novaVBox.getChildren());
+
+            ListaVendedorController controller  = loader.getController();
+            controller.setVendedorServico(new VendedorService());
             controller.updateTableView();
 
         } catch (IOException e) {
