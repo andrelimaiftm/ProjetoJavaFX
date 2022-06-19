@@ -61,7 +61,7 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
         //System.out.println("onBtNovoAction");
         Stage parentStage = Utils.stageCorrente(event);
         Vendedor obj = new Vendedor();
-        criaCaixaDeDialogo(obj, "formDepartamento.fxml", parentStage);
+        criaCaixaDeDialogo(obj, "formVendedor.fxml", parentStage);
 
     }
 
@@ -102,18 +102,18 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
     }
 
     private void criaCaixaDeDialogo(Vendedor obj, String nomeDaView, Stage parentStage){
-        /*try{
+        try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeDaView));
             Pane pane = loader.load();
 
-            FormDepartamentoController controller = loader.getController();
-            controller.setDepartamento(obj);
-            controller.setDepartamentoService(new DepartamentoService());
+            FormVendedorController controller = loader.getController();
+            controller.setVendedor(obj);
+            controller.setVendedorService(new VendedorService());
             controller.adicionaAtualizaDadosListener(this);
             controller.atualizaDadosFormulario();
 
             Stage caixaDialogoStage = new Stage();
-            caixaDialogoStage.setTitle("Digite dados para Departamento");
+            caixaDialogoStage.setTitle("Digite dados para Vendedor");
             caixaDialogoStage.setScene(new Scene(pane));
             caixaDialogoStage.setResizable(false);
             caixaDialogoStage.initOwner(parentStage);
@@ -124,7 +124,7 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
             Alerts.showAlert("IOExpetion", "Erro ao carregar a view",
                     e.getMessage(),
                     Alert.AlertType.ERROR);
-        }*/
+        }
 
     }
 
@@ -147,7 +147,7 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
                 setGraphic(button);
                 button.setOnAction(
                         event -> criaCaixaDeDialogo(
-                                obj, "formDepartamento.fxml",Utils.stageCorrente(event)));
+                                obj, "formVendedor.fxml",Utils.stageCorrente(event)));
             }
         });
     }
