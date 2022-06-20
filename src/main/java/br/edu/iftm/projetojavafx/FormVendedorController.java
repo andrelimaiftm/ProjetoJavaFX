@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.util.Callback;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -163,6 +164,25 @@ public class FormVendedorController implements Initializable {
         }
         obj.setNome(txtNome.getText());
 
+        if(txtEmail.getText() == null || txtEmail.getText().trim().equals("")){
+            exception.addErro("email", "Campo não pode ser vazio");
+        }
+        obj.setEmail(txtEmail.getText());
+
+        if(dpDataNasc.getValue() == null){
+            exception.addErro("dataNasc", "Campo não pode ser vazio");
+        }else{
+            Instant instant = Instant.from(dpDataNasc.getValue().atStartOfDay(ZoneId.systemDefault()));
+            obj.setDataNasc(Date.from(instant));
+        }
+
+        if(txtSalario.getText() == null || txtSalario.getText().trim().equals("")){
+            exception.addErro("salario", "Campo não pode ser vazio");
+        }
+        obj.setSalario(Utils.tryParseToDouble(txtSalario.getText()));
+
+        obj.setDepartamento(comboBoxDepartamento.getValue());
+
         if (exception.getErros().size() > 0){
             throw exception;
         }
@@ -174,6 +194,26 @@ public class FormVendedorController implements Initializable {
 
         if(campos.contains("nome")){
             labelNomeErro.setText(erros.get("nome"));
+        }else{
+            labelNomeErro.setText("");
+        }
+
+        if(campos.contains("email")){
+            labelEmailErro.setText(erros.get("email"));
+        }else{
+            labelEmailErro.setText("");
+        }
+
+        if(campos.contains("dataNasc")){
+            labelDataNascErro.setText(erros.get("dataNasc"));
+        }else{
+            labelDataNascErro.setText("");
+        }
+
+        if(campos.contains("salario")){
+            labelSalarioErro.setText(erros.get("salario"));
+        }else{
+            labelSalarioErro.setText("");
         }
     }
 
