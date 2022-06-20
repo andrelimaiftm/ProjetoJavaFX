@@ -46,6 +46,7 @@
             <Label fx:id="labelEmailErro" textFill="#f50505" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label fx:id="labelDataNascErro" textFill="#e80505" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <Label fx:id="labelSalarioErro" textFill="#f50606" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <ComboBox fx:id="comboBoxDepartamento" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </children>

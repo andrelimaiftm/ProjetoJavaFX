@@ -4,10 +4,13 @@ import br.edu.iftm.projetojavafx.Exception.ValidacaoException;
 import br.edu.iftm.projetojavafx.util.Alerts;
 import br.edu.iftm.projetojavafx.util.RestricoesTela;
 import br.edu.iftm.projetojavafx.util.Utils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -15,6 +18,8 @@ import java.time.ZoneId;
 import java.util.*;
 
 public class FormVendedorController implements Initializable {
+
+    private DepartamentoService departamentoService;
 
     private VendedorService service;
 
@@ -38,6 +43,9 @@ public class FormVendedorController implements Initializable {
     private TextField txtSalario;
 
     @FXML
+    private ComboBox<Departamento> comboBoxDepartamento;
+
+    @FXML
     private Label labelNomeErro;
 
     @FXML
@@ -54,12 +62,15 @@ public class FormVendedorController implements Initializable {
     @FXML
     private Button btCancelar;
 
+    private ObservableList<Departamento> obsLista;
+
     public void setVendedor(Vendedor vendedor){
         this.vendedor = vendedor;
     }
 
-    public void setVendedorService(VendedorService service){
+    public void setServices(VendedorService service, DepartamentoService departamentoService){
         this.service = service;
+        this.departamentoService = departamentoService;
     }
 
     @FXML
@@ -114,6 +125,8 @@ public class FormVendedorController implements Initializable {
         RestricoesTela.setTextFieldDouble(txtSalario);
         RestricoesTela.setTextFieldMaxLength(txtEmail, 60);
         Utils.formatDatePicker(dpDataNasc, "dd/MM/yyyy");
+
+        inicializaComboBoxDepartamento();
     }
 
     public void atualizaDadosFormulario(){
@@ -129,6 +142,12 @@ public class FormVendedorController implements Initializable {
         if(vendedor.getDataNasc() != null){
             dpDataNasc.setValue(LocalDate.ofInstant(vendedor.getDataNasc().toInstant(),
                     ZoneId.systemDefault()));
+        }
+
+        if(vendedor.getDepartamento() == null){
+            comboBoxDepartamento.getSelectionModel().selectFirst();
+        }else{
+            comboBoxDepartamento.setValue(vendedor.getDepartamento());
         }
     }
 
@@ -156,5 +175,27 @@ public class FormVendedorController implements Initializable {
         if(campos.contains("nome")){
             labelNomeErro.setText(erros.get("nome"));
         }
+    }
+
+    public void carregarObjetosAssociados(){
+        if(departamentoService == null){
+            throw new IllegalStateException("Servioço de Departamento está nulo.");
+        }
+        List<Departamento> lista = departamentoService.buscarTodos();
+        obsLista = FXCollections.observableArrayList(lista);
+        comboBoxDepartamento.setItems(obsLista);
+    }
+
+
+    private void inicializaComboBoxDepartamento() {
+        Callback<ListView<Departamento>, ListCell<Departamento>> factory = lv -> new ListCell<Departamento>() {
+            @Override
+            protected void updateItem(Departamento item, boolean vazio) {
+                super.updateItem(item, vazio);
+                setText(vazio ? "" : item.getNome());
+            }
+        };
+        comboBoxDepartamento.setCellFactory(factory);
+        comboBoxDepartamento.setButtonCell(factory.call(null));
     }
 }

@@ -108,7 +108,8 @@ public class ListaVendedorController implements Initializable, AtualizaDadoListe
 
             FormVendedorController controller = loader.getController();
             controller.setVendedor(obj);
-            controller.setVendedorService(new VendedorService());
+            controller.setServices(new VendedorService(), new DepartamentoService());
+            controller.carregarObjetosAssociados();
             controller.adicionaAtualizaDadosListener(this);
             controller.atualizaDadosFormulario();
 
